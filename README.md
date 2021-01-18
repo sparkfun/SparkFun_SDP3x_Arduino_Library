@@ -1,4 +1,4 @@
-SparkFun SDP3x Library
+SparkFun SDP3x Arduino Library
 ===========================================================
  [![SparkX Qwiic Differential Pressure Sensor SDP31 (SPX-nnnnn)]()](https://www.sparkfun.com/products/nnnnn)
 

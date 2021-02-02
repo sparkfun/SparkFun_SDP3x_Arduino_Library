@@ -6,8 +6,8 @@
 # Datatypes (KEYWORD1)
 #######################################
 
-SGP3X	KEYWORD1
-SGP3XERR	KEYWORD1
+SDP3X	KEYWORD1
+SDP3XERR	KEYWORD1
 
 #######################################
 # Methods and Functions (KEYWORD2)
@@ -27,6 +27,6 @@ readMeasurement	KEYWORD2
 # Constants (LITERAL1)
 #######################################
 
-SGP3X_SUCCESS	LITERAL1
-SGP3X_ERR_BAD_CRC	LITERAL1
-SGP3X_ERR_I2C_ERROR	LITERAL1
+SDP3X_SUCCESS	LITERAL1
+SDP3X_ERR_BAD_CRC	LITERAL1
+SDP3X_ERR_I2C_ERROR	LITERAL1

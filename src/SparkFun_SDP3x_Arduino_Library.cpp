@@ -37,28 +37,28 @@
 */
 
 
-#include "SparkFun_SGP3x_Arduino_Library.h"
+#include "SparkFun_SDP3x_Arduino_Library.h"
 
 
 //Constructor
-SGP3X::SGP3X()
+SDP3X::SDP3X()
 {
 }
 
 //Start I2C communication using specified port
 //Returns true if successful or false if no sensor detected
-bool SGP3X::begin(uint8_t address, TwoWire &wirePort)
+bool SDP3X::begin(uint8_t address, TwoWire &wirePort)
 {
-  _SGP3XAddress = address; //Grab which i2c address the user wants us to use
+  _SDP3XAddress = address; //Grab which i2c address the user wants us to use
   _i2cPort = &wirePort; //Grab which port the user wants us to use
 
   uint32_t prodId = readProductId(); //Check which sensor is attached
 
-  if (prodId == sgp3x_product_id_SDP31) //Check if we have an SDP31
+  if (prodId == SDP3x_product_id_SDP31) //Check if we have an SDP31
   {
     return (true);
   }
-  else if (prodId == sgp3x_product_id_SDP32) //Check if we have an SDP32
+  else if (prodId == SDP3x_product_id_SDP32) //Check if we have an SDP32
   {
     return (true);
   }
@@ -70,7 +70,7 @@ bool SGP3X::begin(uint8_t address, TwoWire &wirePort)
 
 //Calling this function with nothing sets the debug port to Serial
 //You can also call it with other streams like Serial1, SerialUSB, etc.
-void SGP3X::enableDebugging(Stream &debugPort)
+void SDP3X::enableDebugging(Stream &debugPort)
 {
 	_debugPort = &debugPort;
 	_printDebug = true;
@@ -78,10 +78,10 @@ void SGP3X::enableDebugging(Stream &debugPort)
 
 //Read the 32-bit product identifier
 //Returns zero if an error occurred
-uint32_t SGP3X::readProductId(void)
+uint32_t SDP3X::readProductId(void)
 {
-  _i2cPort->beginTransmission(_SGP3XAddress);
-  _i2cPort->write(sgp3x_read_product_id_part1, 2); //Request the product ID - part 1
+  _i2cPort->beginTransmission(_SDP3XAddress);
+  _i2cPort->write(SDP3x_read_product_id_part1, 2); //Request the product ID - part 1
   uint8_t i2cResult = _i2cPort->endTransmission();
 
   if (i2cResult != 0)
@@ -96,8 +96,8 @@ uint32_t SGP3X::readProductId(void)
 
   delay(1);
 
-  _i2cPort->beginTransmission(_SGP3XAddress);
-  _i2cPort->write(sgp3x_read_product_id_part2, 2); //Request the product ID - part 2
+  _i2cPort->beginTransmission(_SDP3XAddress);
+  _i2cPort->write(SDP3x_read_product_id_part2, 2); //Request the product ID - part 2
   i2cResult = _i2cPort->endTransmission();
 
   if (i2cResult != 0)
@@ -131,7 +131,7 @@ uint32_t SGP3X::readProductId(void)
   // Byte16: Serial number [15:8]
   // Byte17: Serial number [7:0]
   // Byte18: CRC
-  uint8_t toRead = _i2cPort->requestFrom(_SGP3XAddress, (uint8_t)18);
+  uint8_t toRead = _i2cPort->requestFrom(_SDP3XAddress, (uint8_t)18);
   if (toRead != 18)
   {
     if (_printDebug == true)
@@ -184,7 +184,7 @@ uint32_t SGP3X::readProductId(void)
 
 //Perform a soft reset
 //Note: this is performed using a general call to I2C address 0x00 followed by command code 0x06
-SGP3XERR SGP3X::softReset(void)
+SDP3XERR SDP3X::softReset(void)
 {
   _i2cPort->beginTransmission(0x00);
   _i2cPort->write(0x06); //Perform a soft reset
@@ -199,18 +199,18 @@ SGP3XERR SGP3X::softReset(void)
       _debugPort->print(F("softReset: endTransmission returned: "));
       _debugPort->println(i2cResult);
     }
-    return SGP3X_ERR_I2C_ERROR;
+    return SDP3X_ERR_I2C_ERROR;
   }
 
-  return SGP3X_SUCCESS;
+  return SDP3X_SUCCESS;
 }
 
 //Enter sleep mode
 //Returns SUCCESS (0) if successful
-SGP3XERR SGP3X::enterSleepMode(void)
+SDP3XERR SDP3X::enterSleepMode(void)
 {
-  _i2cPort->beginTransmission(_SGP3XAddress);
-  _i2cPort->write(sgp3x_enter_sleep_mode, 2); //Enter sleep mode
+  _i2cPort->beginTransmission(_SDP3XAddress);
+  _i2cPort->write(SDP3x_enter_sleep_mode, 2); //Enter sleep mode
   uint8_t i2cResult = _i2cPort->endTransmission();
 
   if (i2cResult != 0)
@@ -220,26 +220,26 @@ SGP3XERR SGP3X::enterSleepMode(void)
       _debugPort->print(F("enterSleepMode: endTransmission returned: "));
       _debugPort->println(i2cResult);
     }
-    return SGP3X_ERR_I2C_ERROR;
+    return SDP3X_ERR_I2C_ERROR;
   }
 
-  return SGP3X_SUCCESS;
+  return SDP3X_SUCCESS;
 }
 
 //Start continuous measurement
 //Returns SUCCESS (0) if successful
-SGP3XERR SGP3X::startContinuousMeasurement(boolean massFlow, boolean averaging)
+SDP3XERR SDP3X::startContinuousMeasurement(boolean massFlow, boolean averaging)
 {
-  _i2cPort->beginTransmission(_SGP3XAddress);
+  _i2cPort->beginTransmission(_SDP3XAddress);
 
   if (massFlow && averaging)
-    _i2cPort->write(sgp3x_measure_continuous_mass_flow_average_till_read, 2);
+    _i2cPort->write(SDP3x_measure_continuous_mass_flow_average_till_read, 2);
   else if (massFlow && !averaging)
-    _i2cPort->write(sgp3x_measure_continuous_mass_flow_no_averaging, 2);
+    _i2cPort->write(SDP3x_measure_continuous_mass_flow_no_averaging, 2);
   else if (!massFlow && averaging)
-    _i2cPort->write(sgp3x_measure_continuous_differential_pressure_average_till_read, 2);
+    _i2cPort->write(SDP3x_measure_continuous_differential_pressure_average_till_read, 2);
   else //if (!massFlow && !averaging)
-    _i2cPort->write(sgp3x_measure_continuous_differential_pressure_no_averaging, 2);
+    _i2cPort->write(SDP3x_measure_continuous_differential_pressure_no_averaging, 2);
 
   uint8_t i2cResult = _i2cPort->endTransmission();
 
@@ -250,18 +250,18 @@ SGP3XERR SGP3X::startContinuousMeasurement(boolean massFlow, boolean averaging)
       _debugPort->print(F("startContinuousMeasurement: endTransmission returned: "));
       _debugPort->println(i2cResult);
     }
-    return SGP3X_ERR_I2C_ERROR;
+    return SDP3X_ERR_I2C_ERROR;
   }
 
-  return SGP3X_SUCCESS;
+  return SDP3X_SUCCESS;
 }
 
 //Stop continuous measurement
 //Returns SUCCESS (0) if successful
-SGP3XERR SGP3X::stopContinuousMeasurement(void)
+SDP3XERR SDP3X::stopContinuousMeasurement(void)
 {
-  _i2cPort->beginTransmission(_SGP3XAddress);
-  _i2cPort->write(sgp3x_stop_continuous_measure, 2);
+  _i2cPort->beginTransmission(_SDP3XAddress);
+  _i2cPort->write(SDP3x_stop_continuous_measure, 2);
   uint8_t i2cResult = _i2cPort->endTransmission();
 
   if (i2cResult != 0)
@@ -271,26 +271,26 @@ SGP3XERR SGP3X::stopContinuousMeasurement(void)
       _debugPort->print(F("stopContinuousMeasurement: endTransmission returned: "));
       _debugPort->println(i2cResult);
     }
-    return SGP3X_ERR_I2C_ERROR;
+    return SDP3X_ERR_I2C_ERROR;
   }
 
-  return SGP3X_SUCCESS;
+  return SDP3X_SUCCESS;
 }
 
 //Triggered measurement
 //Returns SUCCESS (0) if successful
-SGP3XERR SGP3X::triggeredMeasurement(boolean massFlow, boolean clockStretching)
+SDP3XERR SDP3X::triggeredMeasurement(boolean massFlow, boolean clockStretching)
 {
-  _i2cPort->beginTransmission(_SGP3XAddress);
+  _i2cPort->beginTransmission(_SDP3XAddress);
 
   if (massFlow && clockStretching)
-    _i2cPort->write(sgp3x_measure_triggered_mass_flow_clock_stretching, 2);
+    _i2cPort->write(SDP3x_measure_triggered_mass_flow_clock_stretching, 2);
   else if (massFlow && !clockStretching)
-    _i2cPort->write(sgp3x_measure_triggered_mass_flow_no_clock_stretching, 2);
+    _i2cPort->write(SDP3x_measure_triggered_mass_flow_no_clock_stretching, 2);
   else if (!massFlow && clockStretching)
-    _i2cPort->write(sgp3x_measure_triggered_differential_pressure_clock_stretching, 2);
+    _i2cPort->write(SDP3x_measure_triggered_differential_pressure_clock_stretching, 2);
   else //if (!massFlow && !clockStretching)
-    _i2cPort->write(sgp3x_measure_triggered_differential_pressure_no_clock_stretching, 2);
+    _i2cPort->write(SDP3x_measure_triggered_differential_pressure_no_clock_stretching, 2);
 
   uint8_t i2cResult = _i2cPort->endTransmission();
 
@@ -301,15 +301,15 @@ SGP3XERR SGP3X::triggeredMeasurement(boolean massFlow, boolean clockStretching)
       _debugPort->print(F("triggeredMeasurement: endTransmission returned: "));
       _debugPort->println(i2cResult);
     }
-    return SGP3X_ERR_I2C_ERROR;
+    return SDP3X_ERR_I2C_ERROR;
   }
 
-  return SGP3X_SUCCESS;
+  return SDP3X_SUCCESS;
 }
 
 //Read the mesurement
 //Returns SUCCESS (0) if successful
-SGP3XERR SGP3X::readMeasurement(float *pressure, float *temperature)
+SDP3XERR SDP3X::readMeasurement(float *pressure, float *temperature)
 {
   //Data is 9 bytes:
   // Byte1: Differential Pressure 8msb
@@ -321,7 +321,7 @@ SGP3XERR SGP3X::readMeasurement(float *pressure, float *temperature)
   // Byte7: Scale Factor differential pressure 8msb
   // Byte8: Scale Factor differential pressure 8lsb
   // Byte9: CRC
-  uint8_t toRead = _i2cPort->requestFrom(_SGP3XAddress, (uint8_t)9);
+  uint8_t toRead = _i2cPort->requestFrom(_SDP3XAddress, (uint8_t)9);
   if (toRead != 9)
   {
     if (_printDebug == true)
@@ -329,7 +329,7 @@ SGP3XERR SGP3X::readMeasurement(float *pressure, float *temperature)
       _debugPort->print(F("readMeasurement: requestFrom returned: "));
       _debugPort->println(toRead);
     }
-    return (SGP3X_ERR_I2C_ERROR); //Error out
+    return (SDP3X_ERR_I2C_ERROR); //Error out
   }
 
   // Avoid any confusion when casting unsigned data to signed
@@ -365,7 +365,7 @@ SGP3XERR SGP3X::readMeasurement(float *pressure, float *temperature)
       _debugPort->print(F(" Received: 0x"));
       _debugPort->println(crc1, HEX);
     }
-    return (SGP3X_ERR_BAD_CRC); //checksum failed
+    return (SDP3X_ERR_BAD_CRC); //checksum failed
   }
 
   if (crc2 != _CRC8signed(temp)) //verify checksum 2
@@ -377,7 +377,7 @@ SGP3XERR SGP3X::readMeasurement(float *pressure, float *temperature)
       _debugPort->print(F(" Received: 0x"));
       _debugPort->println(crc2, HEX);
     }
-    return (SGP3X_ERR_BAD_CRC); //checksum failed
+    return (SDP3X_ERR_BAD_CRC); //checksum failed
   }
 
   if (crc3 != _CRC8(scaleFactor)) //verify checksum 3
@@ -389,7 +389,7 @@ SGP3XERR SGP3X::readMeasurement(float *pressure, float *temperature)
       _debugPort->print(F(" Received: 0x"));
       _debugPort->println(crc2, HEX);
     }
-    return (SGP3X_ERR_BAD_CRC); //checksum failed
+    return (SDP3X_ERR_BAD_CRC); //checksum failed
   }
 
   if (_printDebug == true)
@@ -415,11 +415,11 @@ SGP3XERR SGP3X::readMeasurement(float *pressure, float *temperature)
   //Convert temp to float and convert to degrees C
   *temperature = ((float)temp) / 200.0;
 
-  return (SGP3X_SUCCESS); //Success!
+  return (SDP3X_SUCCESS); //Success!
 }
 
 // CRC helper function for signed data
-uint8_t SGP3X::_CRC8signed(int16_t data)
+uint8_t SDP3X::_CRC8signed(int16_t data)
 {
   union
   {
@@ -431,13 +431,13 @@ uint8_t SGP3X::_CRC8signed(int16_t data)
   return (_CRC8(_unsignedSigned._unsigned));
 }
 
-#ifndef SGP3X_LOOKUP_TABLE
+#ifndef SDP3X_LOOKUP_TABLE
 //Given an array and a number of bytes, this calculate CRC8 for those bytes
 //CRC is only calc'd on the data portion (two bytes) of the four bytes being sent
 //From: http://www.sunshine2k.de/articles/coding/crc/understanding_crc.html
 //Tested with: http://www.sunshine2k.de/coding/javascript/crc/crc_js.html
 //x^8+x^5+x^4+1 = 0x31
-uint8_t SGP3X::_CRC8(uint16_t data)
+uint8_t SDP3X::_CRC8(uint16_t data)
 {
   uint8_t crc = 0xFF; //Init with 0xFF
 
@@ -464,8 +464,8 @@ uint8_t SGP3X::_CRC8(uint16_t data)
   return crc; //No output reflection
 }
 #else
-//Generates CRC8 for SGP3X from lookup table
-uint8_t SGP3X::_CRC8(uint16_t data)
+//Generates CRC8 for SDP3X from lookup table
+uint8_t SDP3X::_CRC8(uint16_t data)
 {
   uint8_t CRC = 0xFF; //inital value
   CRC ^= (uint8_t)(data >> 8); //start with MSB

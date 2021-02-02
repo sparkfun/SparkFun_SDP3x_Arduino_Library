@@ -1,5 +1,5 @@
 /*
-  Library for the Sensirion SGP3x Differential Pressure Sensor
+  Library for the Sensirion SDP3x Differential Pressure Sensor
   By: Paul Clark
   SparkFun Electronics
   Date: January 18th, 2021
@@ -9,15 +9,15 @@
   https://www.sparkfun.com/products/nnnnn
 */
 
-#include "SparkFun_SGP3x_Arduino_Library.h" // Click here to get the library: http://librarymanager/All#SparkFun_SGP3x
+#include "SparkFun_SDP3x_Arduino_Library.h" // Click here to get the library: http://librarymanager/All#SparkFun_SDP3x
 #include <Wire.h>
 
-SGP3X mySensor; //create an object of the SGP3X class
+SDP3X mySensor; //create an object of the SDP3X class
 
 void setup()
 {
   Serial.begin(115200);
-  Serial.println(F("SGP3X Example"));
+  Serial.println(F("SDP3X Example"));
 
   Wire.begin();
 
@@ -26,7 +26,7 @@ void setup()
   //Initialize sensor using an alternate I2C address
   if (mySensor.begin(0x22) == false) // Use 0x22 instead of the default (0x21)
   {
-    Serial.println(F("SGP3X not detected. Check connections. Freezing..."));
+    Serial.println(F("SDP3X not detected. Check connections. Freezing..."));
     while (1)
       ; // Do nothing more
   }

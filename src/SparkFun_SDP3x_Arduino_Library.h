@@ -37,8 +37,8 @@
 */
 
 
-#ifndef SparkFun_SGP3x_Arduino_Library_h
-#define SparkFun_SGP3x_Arduino_Library_h
+#ifndef SparkFun_SDP3x_Arduino_Library_h
+#define SparkFun_SDP3x_Arduino_Library_h
 
 #include "Arduino.h"
 #include <Wire.h>
@@ -46,47 +46,47 @@
 #define SDP3X_LOOKUP_TABLE // Comment this line to save program memory space. _CRC8 will be slower though...
 
 typedef enum {
-  SGP3X_SUCCESS = 0,
-  SGP3X_ERR_BAD_CRC,
-  SGP3X_ERR_I2C_ERROR
-} SGP3XERR;
+  SDP3X_SUCCESS = 0,
+  SDP3X_ERR_BAD_CRC,
+  SDP3X_ERR_I2C_ERROR
+} SDP3XERR;
 
-//SGP3X Default I2C Address
+//SDP3X Default I2C Address
 //Can be changed to 0x22 or 0x23 by changing the jumpers
-const uint8_t sgp3x_default_i2c_address = 0x21;
+const uint8_t SDP3x_default_i2c_address = 0x21;
 
-//SGP3X I2C Commands
-const uint8_t sgp3x_measure_continuous_mass_flow_average_till_read[2] = {0x36, 0x03};
-const uint8_t sgp3x_measure_continuous_mass_flow_no_averaging[2] = {0x36, 0x08};
-const uint8_t sgp3x_measure_continuous_differential_pressure_average_till_read[2] = {0x36, 0x15};
-const uint8_t sgp3x_measure_continuous_differential_pressure_no_averaging[2] = {0x36, 0x1E};
+//SDP3X I2C Commands
+const uint8_t SDP3x_measure_continuous_mass_flow_average_till_read[2] = {0x36, 0x03};
+const uint8_t SDP3x_measure_continuous_mass_flow_no_averaging[2] = {0x36, 0x08};
+const uint8_t SDP3x_measure_continuous_differential_pressure_average_till_read[2] = {0x36, 0x15};
+const uint8_t SDP3x_measure_continuous_differential_pressure_no_averaging[2] = {0x36, 0x1E};
 
-const uint8_t sgp3x_stop_continuous_measure[2] = {0x3F, 0xF9};
+const uint8_t SDP3x_stop_continuous_measure[2] = {0x3F, 0xF9};
 
-const uint8_t sgp3x_measure_triggered_mass_flow_no_clock_stretching[2] = {0x36, 0x24};
-const uint8_t sgp3x_measure_triggered_mass_flow_clock_stretching[2] = {0x37, 0x26};
-const uint8_t sgp3x_measure_triggered_differential_pressure_no_clock_stretching[2] = {0x36, 0x2F};
-const uint8_t sgp3x_measure_triggered_differential_pressure_clock_stretching[2] = {0x37, 0x2D};
+const uint8_t SDP3x_measure_triggered_mass_flow_no_clock_stretching[2] = {0x36, 0x24};
+const uint8_t SDP3x_measure_triggered_mass_flow_clock_stretching[2] = {0x37, 0x26};
+const uint8_t SDP3x_measure_triggered_differential_pressure_no_clock_stretching[2] = {0x36, 0x2F};
+const uint8_t SDP3x_measure_triggered_differential_pressure_clock_stretching[2] = {0x37, 0x2D};
 
-const uint8_t sgp3x_enter_sleep_mode[2] = {0x36, 0x77};
+const uint8_t SDP3x_enter_sleep_mode[2] = {0x36, 0x77};
 
-const uint8_t sgp3x_read_product_id_part1[2] = {0x36, 0x7C};
-const uint8_t sgp3x_read_product_id_part2[2] = {0xE1, 0x02};
+const uint8_t SDP3x_read_product_id_part1[2] = {0x36, 0x7C};
+const uint8_t SDP3x_read_product_id_part2[2] = {0xE1, 0x02};
 
-//SGP3X Product IDs
-const uint32_t sgp3x_product_id_SDP31 = 0x03010101;
-const uint32_t sgp3x_product_id_SDP32 = 0x03010201;
+//SDP3X Product IDs
+const uint32_t SDP3x_product_id_SDP31 = 0x03010101;
+const uint32_t SDP3x_product_id_SDP32 = 0x03010201;
 
-class SGP3X
+class SDP3X
 {
     // user-accessible "public" interface
   public:
 
     //default constructor
-    SGP3X();
+    SDP3X();
 
     //Start I2C communication using specified address and port
-    boolean begin(uint8_t address = sgp3x_default_i2c_address, TwoWire &wirePort = Wire); //If user doesn't specify then Wire will be used
+    boolean begin(uint8_t address = SDP3x_default_i2c_address, TwoWire &wirePort = Wire); //If user doesn't specify then Wire will be used
 
     void enableDebugging(Stream &debugPort = Serial); //Turn on debug printing. If user doesn't specify then Serial will be used.
 
@@ -97,19 +97,19 @@ class SGP3X
 
     //Perform a soft reset
     //Note: this is performed using a general call to I2C address 0x00 followed by command code 0x06
-    SGP3XERR softReset(void);
+    SDP3XERR softReset(void);
 
     //Enter sleep mode
-    SGP3XERR enterSleepMode(void);
+    SDP3XERR enterSleepMode(void);
 
     //Measurements
 
-    SGP3XERR startContinuousMeasurement(boolean massFlow = true, boolean averaging = false); // Default to mass flow temperature compensation with no averaging
-    SGP3XERR stopContinuousMeasurement(void);
+    SDP3XERR startContinuousMeasurement(boolean massFlow = true, boolean averaging = false); // Default to mass flow temperature compensation with no averaging
+    SDP3XERR stopContinuousMeasurement(void);
 
-    SGP3XERR triggeredMeasurement(boolean massFlow = true, boolean clockStretching = false); // Default to mass flow temperature compensation with no clock stretching
+    SDP3XERR triggeredMeasurement(boolean massFlow = true, boolean clockStretching = false); // Default to mass flow temperature compensation with no clock stretching
 
-    SGP3XERR readMeasurement(float *pressure, float *temperature); // Read the measurement
+    SDP3XERR readMeasurement(float *pressure, float *temperature); // Read the measurement
 
   private:
 
@@ -117,17 +117,17 @@ class SGP3X
     TwoWire * _i2cPort;
 
     //This stores the i2c address
-    uint8_t _SGP3XAddress;
+    uint8_t _SDP3XAddress;
 
     //Debug
     Stream *_debugPort;			 //The stream to send debug messages to if enabled. Usually Serial.
   	boolean _printDebug = false; //Flag to print debugging variables
 
-    //Generates CRC8 for SGP40 from lookup table or polynomial (if SGP3X_LOOKUP_TABLE is undefined)
+    //Generates CRC8 for SDP3X from lookup table or polynomial (if SDP3X_LOOKUP_TABLE is undefined)
     uint8_t _CRC8(uint16_t twoBytes);
     uint8_t _CRC8signed(int16_t twoBytes);
 
-#ifdef SGP3X_LOOKUP_TABLE
+#ifdef SDP3X_LOOKUP_TABLE
     //lookup table for CRC8  http://www.sunshine2k.de/coding/javascript/crc/crc_js.html
     const uint8_t _CRC8LookupTable[16][16] = {
       {0x00, 0x31, 0x62, 0x53, 0xC4, 0xF5, 0xA6, 0x97, 0xB9, 0x88, 0xDB, 0xEA, 0x7D, 0x4C, 0x1F, 0x2E},

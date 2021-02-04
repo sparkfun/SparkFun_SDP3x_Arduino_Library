@@ -1,8 +1,9 @@
 SparkFun SDP3x Arduino Library
 ===========================================================
- [![SparkX Qwiic Differential Pressure Sensor SDP31 (SPX-nnnnn)]()](https://www.sparkfun.com/products/nnnnn)
 
-[*SparkX Qwiic Differential Pressure Sensor SDP31 (SPX-nnnnn)*](https://www.sparkfun.com/products/nnnnn)
+[![SparkX Qwiic Differential Pressure Sensor SDP31 (SPX-17874)]()](https://www.sparkfun.com/products/17874)
+
+[*SparkX Qwiic Differential Pressure Sensor SDP31 (SPX-17874)*](https://www.sparkfun.com/products/17874)
 
 The SDP3x sensor family is Sensirion’s series of small differential pressure sensors designed for high-volume applications where size is a key requirement. It builds on the next generation CMOSens® sensor chip that is at the heart of Sensirion’s new differential pressure and flow sensing platform.
 
@@ -13,7 +14,7 @@ Able to measure differential pressures in the range +/- 500 Pascals (+/- 0.005 A
 This Arduino library provides full support for the SDP3x series.
 
 SparkFun labored with love to create this code. Feel like supporting open source hardware?
-Buy a [board](https://www.sparkfun.com/products/nnnnn) from SparkFun!
+Buy a [board](https://www.sparkfun.com/products/17874) from SparkFun!
 
 Repository Contents
 -------------------
@@ -31,7 +32,7 @@ Documentation
 
 Products that use this library
 --------------
-* [SPX-nnnnn](https://www.sparkfun.com/products/nnnnn)- SparkX Version
+* [SPX-17874](https://www.sparkfun.com/products/17874)- SparkX Version
 
 License Information
 -------------------

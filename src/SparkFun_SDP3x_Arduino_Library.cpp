@@ -394,7 +394,7 @@ SDP3XERR SDP3X::readMeasurement(float *pressure, float *temperature)
 
   //Convert pressure to float and apply the scale factor
   float differential = (float)diffPress;
-  float scale = (float)scaleFactor;
+  float scale = (float)scaleFactor; // Should be: 60 for SDP31; 240 for SDP32
 
   if (_printDebug == true)
   {

@@ -155,7 +155,7 @@ uint32_t SDP3X::readProductId(void)
   while (_i2cPort->available())
     _i2cPort->read(); //Read and discard the serial number
 
-  if (crc1 != _CRC8((uint16_t) prodId >> 16)) //verify checksum 1
+  if (crc1 != _CRC8((uint16_t)(prodId >> 16))) //verify checksum 1
   {
     if (_printDebug == true)
     {
@@ -167,7 +167,7 @@ uint32_t SDP3X::readProductId(void)
     return (0); //checksum failed
   }
 
-  if (crc2 != _CRC8((uint16_t) prodId & 0xFFFF)) //verify checksum 2
+  if (crc2 != _CRC8((uint16_t)(prodId & 0xFFFF))) //verify checksum 2
   {
     if (_printDebug == true)
     {
@@ -387,17 +387,9 @@ SDP3XERR SDP3X::readMeasurement(float *pressure, float *temperature)
       _debugPort->print(F("readMeasurement: checksum 3 failed! Expected: 0x"));
       _debugPort->print(_CRC8(scaleFactor), HEX);
       _debugPort->print(F(" Received: 0x"));
-      _debugPort->println(crc2, HEX);
+      _debugPort->println(crc3, HEX);
     }
     return (SDP3X_ERR_BAD_CRC); //checksum failed
-  }
-
-  if (_printDebug == true)
-  {
-    _debugPort->print(F("readMeasurement: checksum 3 failed! Expected: 0x"));
-    _debugPort->print(_CRC8(scaleFactor), HEX);
-    _debugPort->print(F(" Received: 0x"));
-    _debugPort->println(crc2, HEX);
   }
 
   //Convert pressure to float and apply the scale factor

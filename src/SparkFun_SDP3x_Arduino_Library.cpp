@@ -182,13 +182,27 @@ uint32_t SDP3X::readProductId(void)
   return (prodId); //Return the product Id
 }
 
-//Perform a soft reset
-//Note: this is performed using a general call to I2C address 0x00 followed by command code 0x06
-SDP3XERR SDP3X::softReset(void)
+// Perform a soft reset
+// Note: this is performed using a general call to I2C address 0x00 followed by command code 0x06
+// softReset can be called before .begin if required
+// If the sensor has been begun (_i2cPort is not NUll) then _i2cPort is used
+// If the sensor has not been begun (_i2cPort is NUll) then wirePort is used (which will default to Wire)
+SDP3XERR SDP3X::softReset(TwoWire &wirePort)
 {
-  _i2cPort->beginTransmission(0x00);
-  _i2cPort->write(0x06); //Perform a soft reset
-  uint8_t i2cResult = _i2cPort->endTransmission();
+  uint8_t i2cResult;
+  if (_i2cPort != NULL) //If the sensor has been begun (_i2cPort is not NUll) then _i2cPort is used
+  {
+    _i2cPort->beginTransmission(0x00);
+    _i2cPort->write(0x06); //Perform a soft reset
+    i2cResult = _i2cPort->endTransmission();
+  }
+  else
+  {
+    //If the sensor has not been begun (_i2cPort is NUll) then wirePort is used (which will default to Wire)
+    wirePort.beginTransmission(0x00);
+    wirePort.write(0x06); //Perform a soft reset
+    i2cResult = wirePort.endTransmission();
+  }
 
   delay(20); //From Sensirion Sample Code adp3x.c Sdp3x_SoftReset
 
@@ -256,13 +270,27 @@ SDP3XERR SDP3X::startContinuousMeasurement(boolean massFlow, boolean averaging)
   return SDP3X_SUCCESS;
 }
 
-//Stop continuous measurement
-//Returns SUCCESS (0) if successful
-SDP3XERR SDP3X::stopContinuousMeasurement(void)
+// Stop continuous measurement
+// Returns SUCCESS (0) if successful
+// stopContinuousMeasurement can be called before .begin if required
+// If the sensor has been begun (_i2cPort is not NULL) then _i2cPort and _SDP3XAddress are used
+// If the sensor has not been begun (_i2cPort is NUll) then wirePort and address are used (which will default to Wire)
+SDP3XERR SDP3X::stopContinuousMeasurement(uint8_t address, TwoWire &wirePort)
 {
-  _i2cPort->beginTransmission(_SDP3XAddress);
-  _i2cPort->write(SDP3x_stop_continuous_measure, 2);
-  uint8_t i2cResult = _i2cPort->endTransmission();
+  uint8_t i2cResult;
+  if (_i2cPort != NULL) // If the sensor has been begun (_i2cPort is not NUll) then _i2cPort and _SDP3XAddress are used
+  {
+    _i2cPort->beginTransmission(_SDP3XAddress);
+    _i2cPort->write(SDP3x_stop_continuous_measure, 2);
+    i2cResult = _i2cPort->endTransmission();
+  }
+  else
+  {
+    // If the sensor has not been begun (_i2cPort is NUll) then wirePort and address are used (which will default to Wire)
+    wirePort.beginTransmission(address);
+    wirePort.write(SDP3x_stop_continuous_measure, 2);
+    i2cResult = wirePort.endTransmission();
+  }
 
   if (i2cResult != 0)
   {
@@ -273,6 +301,8 @@ SDP3XERR SDP3X::stopContinuousMeasurement(void)
     }
     return SDP3X_ERR_I2C_ERROR;
   }
+
+  delay(1); // Datasheet says sensor will be receptive for another command after 500us
 
   return SDP3X_SUCCESS;
 }

@@ -95,17 +95,28 @@ class SDP3X
     //Returns zero if an error occurred
     uint32_t readProductId(void);
 
-    //Perform a soft reset
-    //Note: this is performed using a general call to I2C address 0x00 followed by command code 0x06
-    SDP3XERR softReset(void);
+    // Perform a soft reset
+    // Note: this is performed using a general call to I2C address 0x00 followed by command code 0x06
+    // softReset can be called before .begin if required
+    // If the sensor has been begun (_i2cPort is not NULL) then _i2cPort is used
+    // If the sensor has not been begun (_i2cPort is NULL) then wirePort is used (which will default to Wire)
+    SDP3XERR softReset(TwoWire &wirePort = Wire);
 
     //Enter sleep mode
     SDP3XERR enterSleepMode(void);
 
     //Measurements
 
+    // Start continuous measurements
+    // The datasheet says:
+    // "When the sensor is in continuous measurement mode, the sensor must be stopped before it can accept
+    //  another command. The only exception is the soft reset command"
     SDP3XERR startContinuousMeasurement(boolean massFlow = true, boolean averaging = false); // Default to mass flow temperature compensation with no averaging
-    SDP3XERR stopContinuousMeasurement(void);
+
+    // stopContinuousMeasurement can be called before .begin if required
+    // If the sensor has been begun (_i2cPort is not NULL) then _i2cPort and _SDP3XAddress are used
+    // If the sensor has not been begun (_i2cPort is NUll) then wirePort and address are used (which will default to Wire)
+    SDP3XERR stopContinuousMeasurement(uint8_t address = SDP3x_default_i2c_address, TwoWire &wirePort = Wire);
 
     SDP3XERR triggeredMeasurement(boolean massFlow = true, boolean clockStretching = false); // Default to mass flow temperature compensation with no clock stretching
 
@@ -114,7 +125,7 @@ class SDP3X
   private:
 
     //This stores the requested i2c port
-    TwoWire * _i2cPort;
+    TwoWire * _i2cPort = NULL;
 
     //This stores the i2c address
     uint8_t _SDP3XAddress;

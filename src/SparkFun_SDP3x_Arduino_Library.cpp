@@ -242,7 +242,7 @@ SDP3XERR SDP3X::enterSleepMode(void)
 
 //Start continuous measurement
 //Returns SUCCESS (0) if successful
-SDP3XERR SDP3X::startContinuousMeasurement(boolean massFlow, boolean averaging)
+SDP3XERR SDP3X::startContinuousMeasurement(bool massFlow, bool averaging)
 {
   _i2cPort->beginTransmission(_SDP3XAddress);
 
@@ -309,7 +309,7 @@ SDP3XERR SDP3X::stopContinuousMeasurement(uint8_t address, TwoWire &wirePort)
 
 //Triggered measurement
 //Returns SUCCESS (0) if successful
-SDP3XERR SDP3X::triggeredMeasurement(boolean massFlow, boolean clockStretching)
+SDP3XERR SDP3X::triggeredMeasurement(bool massFlow, bool clockStretching)
 {
   _i2cPort->beginTransmission(_SDP3XAddress);
 

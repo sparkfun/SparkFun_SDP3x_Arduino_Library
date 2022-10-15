@@ -86,7 +86,7 @@ class SDP3X
     SDP3X();
 
     //Start I2C communication using specified address and port
-    boolean begin(uint8_t address = SDP3x_default_i2c_address, TwoWire &wirePort = Wire); //If user doesn't specify then Wire will be used
+    bool begin(uint8_t address = SDP3x_default_i2c_address, TwoWire &wirePort = Wire); //If user doesn't specify then Wire will be used
 
     void enableDebugging(Stream &debugPort = Serial); //Turn on debug printing. If user doesn't specify then Serial will be used.
 
@@ -111,14 +111,14 @@ class SDP3X
     // The datasheet says:
     // "When the sensor is in continuous measurement mode, the sensor must be stopped before it can accept
     //  another command. The only exception is the soft reset command"
-    SDP3XERR startContinuousMeasurement(boolean massFlow = true, boolean averaging = false); // Default to mass flow temperature compensation with no averaging
+    SDP3XERR startContinuousMeasurement(bool massFlow = true, bool averaging = false); // Default to mass flow temperature compensation with no averaging
 
     // stopContinuousMeasurement can be called before .begin if required
     // If the sensor has been begun (_i2cPort is not NULL) then _i2cPort and _SDP3XAddress are used
     // If the sensor has not been begun (_i2cPort is NUll) then wirePort and address are used (which will default to Wire)
     SDP3XERR stopContinuousMeasurement(uint8_t address = SDP3x_default_i2c_address, TwoWire &wirePort = Wire);
 
-    SDP3XERR triggeredMeasurement(boolean massFlow = true, boolean clockStretching = false); // Default to mass flow temperature compensation with no clock stretching
+    SDP3XERR triggeredMeasurement(bool massFlow = true, bool clockStretching = false); // Default to mass flow temperature compensation with no clock stretching
 
     SDP3XERR readMeasurement(float *pressure, float *temperature); // Read the measurement
 
@@ -132,7 +132,7 @@ class SDP3X
 
     //Debug
     Stream *_debugPort;			 //The stream to send debug messages to if enabled. Usually Serial.
-  	boolean _printDebug = false; //Flag to print debugging variables
+  	bool _printDebug = false; //Flag to print debugging variables
 
     //Generates CRC8 for SDP3X from lookup table or polynomial (if SDP3X_LOOKUP_TABLE is undefined)
     uint8_t _CRC8(uint16_t twoBytes);
